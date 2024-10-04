@@ -19,7 +19,12 @@ func RenameFilesBasedOnMetadata(sourceDir, targetDir string) error {
 		targetDir = sourceDir
 	}
 
-	targetDir = createDir(targetDir)
+	if !FileExists(targetDir) {
+		return &MyError{
+			Message: "目标目录不存在或权限不足",
+		}
+	}
+
 	videoDir := createDir(targetDir + "/video")
 	imgDir := createDir(targetDir + "/img")
 

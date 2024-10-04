@@ -20,6 +20,7 @@ var RenameCmd = &cobra.Command{
 		// 调用文件重命名函数
 		err := fileutils.RenameFilesBasedOnMetadata(sourceDir, targetDir)
 		if err != nil {
+			custom_print.Error("%v", err)
 			logger.Sugar.Errorf("Error renaming files: %v", err)
 		} else {
 			custom_print.Success("All files have been renamed and moved successfully!")
