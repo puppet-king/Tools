@@ -62,3 +62,26 @@ func Checkdate(month, day, year int) bool {
 
 	return true
 }
+
+// Date 格式化 Unix 时间戳 timestamp 可选若为 nil 则视为取当前时间
+// 如果是错误的格式, 则会原样返回
+func Date(format string, timestamp *int64) string {
+	// 初始化参数
+	if timestamp == nil {
+		now := time.Now().Unix()
+		timestamp = &now
+	}
+
+	return time.Unix(*timestamp, 0).Format(format)
+}
+
+// Sleep 延缓执行 程序延迟执行指定的 seconds 的秒数。
+// int64 变成 Duration 类型才能使用, 而这个没有返回结果, 其实跟 PHP 实际使用无差
+func Sleep(t int64) {
+	time.Sleep(time.Duration(t) * time.Second)
+}
+
+// Usleep 延缓执行 以指定的微秒数延缓程序的执行
+func Usleep(t int64) {
+	time.Sleep(time.Duration(t) * time.Microsecond)
+}

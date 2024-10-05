@@ -9,8 +9,9 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+	"time"
 	"tools/internal/custom_print"
-	"tools/tools"
+	"tools/php"
 )
 
 func TestTime(t *testing.T) {
@@ -52,6 +53,56 @@ func TestCheckDate(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := php.Checkdate(tt.Month, tt.Day, tt.Year); got != tt.want {
 				t.Errorf("Time() ReturnType = %v, want %v", got, tt.want)
+			}
+		})
+
+	}
+}
+
+func TestDate(t *testing.T) {
+	timestamp1 := int64(1728157288)
+
+	tests := []struct {
+		name      string
+		format    string
+		timestamp *int64
+		want      string
+	}{
+		{name: "Standard", format: "2006/01/02", timestamp: &timestamp1, want: "2024/10/06"},
+		{name: "TestError", format: "aaa", timestamp: &timestamp1, want: "aaa"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// php2go.Date();
+			if got := php.Date(tt.format, tt.timestamp); got != tt.want {
+				t.Errorf("Time() ReturnType = %v, want %v", got, tt.want)
+			}
+		})
+
+	}
+}
+
+func TestSleep(t *testing.T) {
+
+	tests := []struct {
+		name  string
+		t, t2 int64
+		want  int64
+	}{
+		{name: "Standard", t: int64(1), t2: int64(1000000), want: 2},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			now := time.Now()
+			php.Sleep(tt.t)
+			php.Usleep(tt.t2)
+
+			diff := time.Since(now)
+			// 浮点数是不精准的, 所以无法类比
+			if seconds := diff.Seconds(); int64(seconds) != tt.want {
+				t.Errorf("Time() ReturnType = %v, want %v", seconds, tt.want)
 			}
 		})
 

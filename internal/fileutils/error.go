@@ -5,7 +5,9 @@ Package fileutils
 */
 package fileutils
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // MyError 自定义的错误类型
 type MyError struct {
