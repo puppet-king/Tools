@@ -84,7 +84,6 @@ func TestDate(t *testing.T) {
 }
 
 func TestSleep(t *testing.T) {
-
 	tests := []struct {
 		name  string
 		t, t2 int64
@@ -106,5 +105,27 @@ func TestSleep(t *testing.T) {
 			}
 		})
 
+	}
+}
+
+func TestStrpos(t *testing.T) {
+	tests := []struct {
+		name             string
+		haystack, needle string
+		offset           int
+		want             int
+	}{
+		{name: "Standard", haystack: "hello world", needle: "w", offset: 0, want: 6},
+		{name: "TestNegative", haystack: "hello world", needle: "w", offset: -5, want: 6},
+		{name: "TestUTF8", haystack: "一二三四五六七八九十", needle: "六", offset: 0, want: 15}, // UTF8 一般中文 3个字符
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if pos, ok := php.Strpos(tt.haystack, tt.needle, tt.offset); !ok || pos != tt.want {
+				t.Errorf("Time() ReturnType = %v, want %v", pos, tt.want)
+			}
+
+		})
 	}
 }

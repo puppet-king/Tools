@@ -6,6 +6,7 @@ Package php
 package php
 
 import (
+	"strings"
 	"time"
 )
 
@@ -84,4 +85,65 @@ func Sleep(t int64) {
 // Usleep 延缓执行 以指定的微秒数延缓程序的执行
 func Usleep(t int64) {
 	time.Sleep(time.Duration(t) * time.Microsecond)
+}
+
+// Strpos 查找字符串首次出现的位置 haystack 的原因
+// "finding a needle in a haystack"（大海捞针）意思是在一堆干草中找到一根针，
+// 比喻在大量或复杂的信息中找到一个小的、难以察觉的部分。
+// offset 为负数时候， 就是从右到左取 绝对值 offset 的长度
+func Strpos(haystack, needle string, offset int) (int, bool) {
+	//php2go.Strpos()
+	// 字符串长度不足的场景： 自身为 0、偏移量大于自身长度（方向）
+	length := len(haystack)
+	if length < 0 || length < offset || length < -offset {
+		return -1, false
+	}
+
+	if offset < 0 {
+		offset += length
+	}
+
+	pos := strings.Index(haystack[offset:], needle)
+	if pos == -1 {
+		return -1, false
+	}
+
+	return pos + offset, true
+}
+
+// Stripos 查找字符串首次出现的位置(不区分大小写)
+func Stripos(haystack, needle string, offset int) (int, bool) {
+	length := len(haystack)
+	if length == 0 || offset > length || -offset > length {
+		return -1, false
+	}
+
+	pos := strings.Index(strings.ToLower(haystack[offset:]), strings.ToLower(needle))
+	if pos == -1 {
+		return -1, false
+	}
+
+	return pos + offset, true
+}
+
+// Strrpos 计算指定字符串在目标字符串中最后一次出现的位置
+func Strrpos(haystack, needle string, offset int) (int, bool) {
+	pos, length := 0, len(haystack)
+	if length == 0 || offset > length || -offset > length {
+		return -1, false
+	}
+
+	// 如果为负数就需要从右到左, 只是方向改变, 不改变长度
+	if offset < 0 {
+		haystack = haystack[:offset+length+1]
+	} else {
+		haystack = haystack[offset:]
+	}
+	pos = strings.LastIndex(haystack, needle)
+	if pos == -1 {
+		return -1, false
+	}
+
+	pos += offset
+	return pos, true
 }
