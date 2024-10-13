@@ -6,6 +6,7 @@ Package php
 package php
 
 import (
+	"github.com/syyongx/php2go"
 	"strings"
 	"time"
 )
@@ -128,6 +129,8 @@ func Stripos(haystack, needle string, offset int) (int, bool) {
 
 // Strrpos 计算指定字符串在目标字符串中最后一次出现的位置
 func Strrpos(haystack, needle string, offset int) (int, bool) {
+	php2go.InArray()
+
 	pos, length := 0, len(haystack)
 	if length == 0 || offset > length || -offset > length {
 		return -1, false
